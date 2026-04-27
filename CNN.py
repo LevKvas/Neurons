@@ -89,6 +89,7 @@ def start_CNN(model, tokenizer, classes_list):
 
     embedding_matrix = np.zeros((num_words, embedding_dim))
     count = 0
+    #  заполнение матрицы embedding
     for word, i in word_index.items():
         if i >= num_words:
             continue
@@ -102,7 +103,7 @@ def start_CNN(model, tokenizer, classes_list):
         print("[DEBUG] Примеры слов из токенайзера:", list(word_index.keys())[:5])
         print("[DEBUG] Пример слова из Word2Vec:", model.index_to_key[0])
 
-    # --- 2. Описываем CNN ---
+    # Описание
     cnn_model = Sequential([
         Embedding(input_dim=num_words,
                   output_dim=embedding_dim,
@@ -115,7 +116,7 @@ def start_CNN(model, tokenizer, classes_list):
 
         Dense(64, activation='relu'),
         Dropout(0.5),
-        Dense(len(classes_list), activation='softmax')  # Количество выходов = количеству жанров
+        Dense(len(classes_list), activation='softmax')
     ])
 
     cnn_model.compile(optimizer='adam',
@@ -158,4 +159,5 @@ def main():
     print(classification_report(y_test, y_pred, target_names=classes_list))
 
 
-main()
+if __name__ == '__main__':
+    main()
