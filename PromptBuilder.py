@@ -1,26 +1,23 @@
 class PromptTemplates:
     @staticmethod
     def build_messages(text: str, examples: dict) -> list:
-        # form examples
+        # Cut to 300 to keep the meaning
         few_shot_context = ""
         for cat, ex_text in examples.items():
-            few_shot_context += f"Текст: {ex_text[:200]}...\nКатегория: {cat}\n\n"
+            few_shot_context += f"Текст: {ex_text[:300]}\nКатегория: {cat}\n\n"
 
-        # allowed categories
         allowed = ", ".join(examples.keys())
 
-        system_content = (
-            "Вы — узкоспециализированный классификатор. "
-            "Ваша задача — называть категорию текста строго из предложенного списка."
-        )
+        system_content = "Ты — бот-классификатор. Твоя задача: прочитать текст и написать название категории."
 
         user_content = (
-            f"### ПРИМЕРЫ ДЛЯ ОБУЧЕНИЯ:\n\n{few_shot_context}"
-            f"### ЗАДАНИЕ:\n"
-            f"Классифицируй следующий текст. \n"
-            f"Текст: {text}\n\n"
-            f"ВНИМАНИЕ: Выбери только одно название из списка: [{allowed}].\n"
-            f"Ответ (только одно слово):"
+            f"Список категорий: {allowed}\n\n"
+            f"Примеры:\n{few_shot_context}"
+            f"Задание: Определи категорию для текста ниже.\n"
+            f"ВАЖНО: Politics — это власть/законы. Travel — это туризм. \
+            Entertainment — это про кино, музыку, концерты и отдых.\n\n"
+            f"Текст: {text}\n"
+            f"Категория:"
         )
 
         return [

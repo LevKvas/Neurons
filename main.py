@@ -54,7 +54,7 @@ def main():
     classifier = pipeline(
         "text-generation",
         model=config.model_id,
-        device_map="cpu"
+        device_map="auto"
     )
 
     examples = get_examples()
